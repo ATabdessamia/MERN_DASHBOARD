@@ -1,0 +1,7 @@
+export const CLASSES_REQUEST = "CLASSES_REQUEST";
+export const CLASSES_SUCCESS = "CLASSES_SUCCESS";
+export const CLASSES_FAIL = "CLASSES_FAIL";
+
+export const CLASS_REQUEST = "CLASS_REQUEST";
+export const CLASS_SUCCESS = "CLASS_SUCCESS";
+export const CLASS_FAIL = "CLASS_FAIL";
