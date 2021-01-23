@@ -1,6 +1,6 @@
 import React from "react";
 
-const ModalCs = ({ ids, year }) => {
+const ModalCs = ({ st, year }) => {
   const date = `${year.split("-")[0] - 1}/${year.split("-")[0]}`;
 
   return (
@@ -12,18 +12,19 @@ const ModalCs = ({ ids, year }) => {
         </span>
       </h3>
 
-      <table className="table-auto w-full h-full text-md border-4 border-purple-300">
+      <table className="table-auto w-1/2 mx-auto h-full text-md border-4 border-purple-300">
         <thead className="border-b border-purple-500">
           <tr className="text-center capitalize p-5 text-purple-700">
-            <th>students_id</th>
+            <th>students</th>
           </tr>
         </thead>
         <tbody>
-          {ids.map((id) => (
-            <tr className="modal-tr" key={id}>
-              <td className="text-yellow-500 py-1 text-center">{id}</td>
-            </tr>
-          ))}
+          {st &&
+            st.map((s) => (
+              <tr className="modal-tr" key={s._id}>
+                <td className="text-yellow-500 py-1 text-center">{`${s.firstName} ${s.lastName}`}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </>

@@ -15,6 +15,7 @@ classRouter.use(isLoggedIn);
 classRouter.use(protect);
 
 classRouter.route("/").get(getAllClasss).post(createNewClass);
+
 classRouter.route("/:id").get(getClass).patch(updateClass).delete(deleteClass);
 
 export default classRouter;

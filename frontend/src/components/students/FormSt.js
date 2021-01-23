@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 import Alert from "../Alert";
 import Buttons from "../Buttons";
 import Input from "../Input";
 import Select from "../Select";
 import Loading from "../Loading";
+import Error from "../Error";
+import "react-datepicker/dist/react-datepicker.css";
 import { getAllTeachers } from "../../actions/teacherActions";
 import { createStudent, getAllStudents } from "../../actions/studentActions";
 
@@ -21,18 +21,18 @@ const FormSt = () => {
   const [cls, setCls] = useState("");
   const [profs, setProfs] = useState([]);
 
-  const data = useSelector((state) => state.teachers);
-  const { loading, teachers } = data;
+  const response = useSelector((state) => state.teachers);
+  const { loading, error, teachers } = response;
 
   useEffect(() => {
     dispatch(getAllTeachers());
   }, [dispatch]);
 
-  if (!teachers) {
-    return <Loading />;
+  if (!teachers.data) {
+    return <Error error={error} />;
   }
 
-  const teacher_ids = teachers.map((t) => t._id);
+  const teacher = teachers.data.map((t) => `${t.firstName} ${t.lastName}`);
 
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +42,6 @@ const FormSt = () => {
 
   return (
     <form className="mt-5" onSubmit={onFormSubmit}>
-      {loading && <Loading />}
       <Alert />
       <div className="p-5">
         <Input
@@ -79,15 +78,18 @@ const FormSt = () => {
           selected={startDate}
           onChange={(date) => setStartDate(date)}
         />
-
-        <Select
-          options={teacher_ids}
-          title="teachers"
-          className="hidden-select block mt-5"
-          onChange={(e) =>
-            setProfs([...e.target.selectedOptions].map((o) => o.value))
-          }
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <Select
+            options={teacher}
+            title="teachers"
+            className="hidden-select block mt-5"
+            onChange={(e) =>
+              setProfs([...e.target.selectedOptions].map((o) => o.value))
+            }
+          />
+        )}
       </div>
       <div className="flex justify-end p-5">
         <button className="hidden-save" type="submit">

@@ -6,8 +6,8 @@ import { getTeacher } from "../../actions/teacherActions";
 
 const ModalTch = ({ id }) => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.teacher);
-  const { loading, error, teacher } = data;
+  const response = useSelector((state) => state.teacher);
+  const { teacher } = response;
 
   useEffect(() => {
     dispatch(getTeacher(id));
@@ -23,12 +23,6 @@ const ModalTch = ({ id }) => {
 
   return (
     <>
-      {loading && <Loading />}
-      {error && (
-        <div className="text-center p-5 text-xl font-black text-red-600">
-          {error}
-        </div>
-      )}
       <h3 className="ml-10 p-2 capitalize text-purple-700 font-black text-lg">
         school year :
         <span className="bg-purple-300 rounded text-purple-900 font-thin ml-1">
@@ -39,7 +33,7 @@ const ModalTch = ({ id }) => {
         <table className="table-auto w-full h-full text-md border-4 border-purple-300">
           <thead className="border-b border-purple-500">
             <tr className="text-center capitalize p-5 text-purple-700">
-              <th>classe_ids</th>
+              <th>classes</th>
             </tr>
           </thead>
           <tbody>

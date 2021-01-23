@@ -7,12 +7,12 @@ import {
   CLASS_FAIL,
 } from "../constants/classConstants";
 
-export const ClassesReducer = (state = {}, action) => {
+export const ClassesReducer = (state = { classes: [] }, action) => {
   switch (action.type) {
     case CLASSES_REQUEST:
-      return { loading: true };
+      return { loading: true, classes: [] };
     case CLASSES_SUCCESS:
-      return { loading: false, classes: action.payload };
+      return { loading: false, classes: action.payload.data };
     case CLASSES_FAIL:
       return { loading: false, error: action.payload };
     default:

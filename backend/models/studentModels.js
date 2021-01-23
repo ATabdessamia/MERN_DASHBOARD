@@ -13,14 +13,14 @@ const studentSchema = mongoose.Schema({
     type: Date,
     required: true,
   },
-  classes: {
+  className: {
     type: String,
     required: true,
   },
   teachers: [
     {
-      type: mongoose.Schema.ObjectId,
-      ref: "Teacher",
+      type: String,
+      required: true,
     },
   ],
 });

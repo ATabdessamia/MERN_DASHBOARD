@@ -10,29 +10,23 @@ import {
   TEACHER_FAIL,
 } from "../constants/teacherConstants";
 
-export const getAllTeachers = (keyword = "") => async (dispatch) => {
+export const getAllTeachers = (keyword = "", page = "") => async (dispatch) => {
   try {
     dispatch({
       type: TEACHERS_REQUEST,
     });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
     const { data } = await axios.get(
-      `/api/teachers?keyword=${keyword}`,
-      config
+      `/api/teachers?keyword=${keyword}&page=${page}`
     );
 
-    dispatch({ type: TEACHERS_SUCCESS, payload: data.data.data });
+    dispatch({ type: TEACHERS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
       type: TEACHERS_FAIL,
       payload:
-        error.response && error.response.statusText
-          ? error.response.statusText
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
           : error.message,
     });
   }
@@ -43,21 +37,16 @@ export const getTeacher = (id) => async (dispatch) => {
     dispatch({
       type: TEACHER_REQUEST,
     });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
-    const { data } = await axios.get(`/api/teachers/${id}`, config);
+    const { data } = await axios.get(`/api/teachers/${id}`);
 
     dispatch({ type: TEACHER_SUCCESS, payload: data.data.data });
   } catch (error) {
     dispatch({
       type: TEACHER_FAIL,
       payload:
-        error.response && error.response.statusText
-          ? error.response.statusText
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
           : error.message,
     });
   }
@@ -74,17 +63,12 @@ export const createTeacher = (
     dispatch({
       type: TEACHER_REQUEST,
     });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
-    const { data } = await axios.post(
-      `/api/teachers`,
-      { firstName, lastName, teach: { classes, Subjects, year } },
-      config
-    );
+    const { data } = await axios.post(`/api/teachers`, {
+      firstName,
+      lastName,
+      teach: { classes, Subjects, year },
+    });
 
     dispatch({ type: TEACHER_SUCCESS, payload: data.data.data });
     toast.success("saved");
@@ -92,8 +76,8 @@ export const createTeacher = (
     dispatch({
       type: TEACHER_FAIL,
       payload:
-        error.response && error.response.statusText
-          ? error.response.statusText
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
           : error.message,
     });
   }
@@ -104,21 +88,16 @@ export const deleteTeacher = (id) => async (dispatch) => {
     dispatch({
       type: TEACHER_REQUEST,
     });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
-    const { data } = await axios.delete(`/api/teachers/${id}`, config);
+    const { data } = await axios.delete(`/api/teachers/${id}`);
 
     dispatch({ type: TEACHER_SUCCESS, payload: data.data.data });
   } catch (error) {
     dispatch({
       type: TEACHER_FAIL,
       payload:
-        error.response && error.response.statusText
-          ? error.response.statusText
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
           : error.message,
     });
   }

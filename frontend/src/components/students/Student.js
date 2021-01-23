@@ -6,25 +6,23 @@ import SearchBar from "../SearchBar";
 import Table from "./TableSt";
 import Navigation from "../Navigation";
 import FormSt from "./FormSt";
-import { getAllStudents } from "../../actions/studentActions";
 import Loading from "../Loading.js";
+import Error from "../Error";
+import { getAllStudents } from "../../actions/studentActions";
 
 const Student = () => {
   const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
   const [term, setTerm] = useState("");
+  let [count, setCount] = useState(1);
 
-  const data = useSelector((state) => state.students);
-  const { loading, error, students } = data;
+  const response = useSelector((state) => state.students);
+  const { loading, error, students } = response;
 
   useEffect(() => {
     dispatch(getAllStudents());
   }, [dispatch]);
-
-  if (!students) {
-    return <Loading />;
-  }
 
   const formHandler = () => {
     setVisible(!visible);
@@ -41,6 +39,20 @@ const Student = () => {
       dispatch(getAllStudents());
     }
   };
+
+  const next = () => {
+    count++;
+    setCount(count);
+    dispatch(getAllStudents("", count));
+  };
+
+  const prev = () => {
+    count--;
+    if (count < 1) return (count = 1);
+    setCount(count);
+    dispatch(getAllStudents("", count));
+  };
+
   return (
     <>
       {visible ? (
@@ -54,19 +66,24 @@ const Student = () => {
         changeHandler={searchTerm}
         onSubmitSearch={onSubmitSearch}
       />
-      <div className="lg:p-5 md:p-4 sm:p-3 p-2">
-        <h3 className="h3-s">students</h3>
-        <div className="scroll-table">
-          {loading && <Loading />}
-          {error && (
-            <div className="text-center p-5 text-xl font-black text-red-600">
-              {error}
-            </div>
-          )}
-          <Table students={students} />
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <Error error={error} to="students" />
+      ) : (
+        <div className="lg:p-5 md:p-4 sm:p-3 p-2">
+          <div className="scroll-table">
+            {loading && <Loading />}
+            <Table students={students.data} />
+          </div>
+          <Navigation
+            next={next}
+            prev={prev}
+            count={count}
+            size={students.resultes}
+          />
         </div>
-        <Navigation />
-      </div>
+      )}
     </>
   );
 };

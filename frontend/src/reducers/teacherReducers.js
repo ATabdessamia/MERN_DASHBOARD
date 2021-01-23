@@ -7,12 +7,12 @@ import {
   TEACHER_FAIL,
 } from "../constants/teacherConstants";
 
-export const TeachersReducer = (state = {}, action) => {
+export const TeachersReducer = (state = { teachers: [] }, action) => {
   switch (action.type) {
     case TEACHERS_REQUEST:
-      return { loading: true };
+      return { loading: true, teachers: [] };
     case TEACHERS_SUCCESS:
-      return { loading: false, teachers: action.payload };
+      return { loading: false, teachers: action.payload.data };
     case TEACHERS_FAIL:
       return { loading: false, error: action.payload };
     default:

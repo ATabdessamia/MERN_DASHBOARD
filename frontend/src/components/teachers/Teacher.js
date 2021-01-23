@@ -7,6 +7,7 @@ import Table from "./TableTch";
 import Navigation from "../Navigation";
 import FormTch from "./FormTch";
 import Loading from "../Loading";
+import Error from "../Error";
 import { getAllTeachers } from "../../actions/teacherActions";
 
 const Teacher = () => {
@@ -14,17 +15,14 @@ const Teacher = () => {
 
   const [visible, setVisible] = useState(false);
   const [term, setTerm] = useState("");
+  let [count, setCount] = useState(1);
 
-  const data = useSelector((state) => state.teachers);
-  const { loading, error, teachers } = data;
+  const response = useSelector((state) => state.teachers);
+  const { loading, error, teachers } = response;
 
   useEffect(() => {
     dispatch(getAllTeachers());
   }, [dispatch]);
-
-  if (!teachers) {
-    return <Loading />;
-  }
 
   const formHandler = () => {
     setVisible(!visible);
@@ -37,9 +35,20 @@ const Teacher = () => {
   const onSubmitSearch = (e) => {
     e.preventDefault();
     dispatch(getAllTeachers(term));
-    if (term === "") {
-      dispatch(getAllTeachers());
-    }
+    term === "" && dispatch(getAllTeachers());
+  };
+
+  const next = () => {
+    count++;
+    setCount(count);
+    dispatch(getAllTeachers("", count));
+  };
+
+  const prev = () => {
+    count--;
+    if (count < 1) return (count = 1);
+    setCount(count);
+    dispatch(getAllTeachers("", count));
   };
 
   return (
@@ -55,19 +64,23 @@ const Teacher = () => {
         changeHandler={searchTerm}
         onSubmitSearch={onSubmitSearch}
       />
-      <div className="lg:p-5 md:p-4 sm:p-3 p-2">
-        <h3 className="h3-s">teachers</h3>
-        <div className="scroll-table">
-          {loading && <Loading />}
-          {error && (
-            <div className="text-center p-5 text-xl font-black text-red-600">
-              {error}
-            </div>
-          )}
-          <Table teachers={teachers} />
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <Error error={error} />
+      ) : (
+        <div className="lg:p-5 md:p-4 sm:p-3 p-2">
+          <div className="scroll-table">
+            <Table teachers={teachers.data} />
+          </div>
+          <Navigation
+            next={next}
+            prev={prev}
+            count={count}
+            size={teachers.resultes}
+          />
         </div>
-        <Navigation />
-      </div>
+      )}
     </>
   );
 };

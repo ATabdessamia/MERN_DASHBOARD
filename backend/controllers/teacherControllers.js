@@ -8,7 +8,7 @@ import {
 import Teacher from "../models/teacherModels.js";
 
 const getTeacher = getHand(Teacher);
-const getAllTeachers = getAllHand(Teacher);
+const getAllTeachers = getAllHand(Teacher, { firstName: 1 });
 const createNewTeacher = createHand(Teacher);
 const updateTeacher = updateHand(Teacher);
 const deleteTeacher = deleteHand(Teacher);

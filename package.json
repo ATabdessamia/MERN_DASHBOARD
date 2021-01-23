@@ -1,6 +1,6 @@
 {
   "name": "dashboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "School Mangement",
   "main": "backend/server.js",
   "type": "module",

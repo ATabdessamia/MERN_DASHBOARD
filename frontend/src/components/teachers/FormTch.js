@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import DatePicker from "react-datepicker";
 
-import "react-datepicker/dist/react-datepicker.css";
 import Buttons from "../Buttons";
 import Input from "../Input";
 import Select from "../Select";
-import { createTeacher, getAllTeachers } from "../../actions/teacherActions";
 import Alert from "../Alert";
+import "react-datepicker/dist/react-datepicker.css";
+import { createTeacher, getAllTeachers } from "../../actions/teacherActions";
 
 const subjects = ["math", "biology", "geography", "history", "science"];
 const classes = [

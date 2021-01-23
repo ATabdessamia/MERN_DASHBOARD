@@ -43,8 +43,11 @@ const createHand = (Model) =>
     });
   });
 
-const getAllHand = (Model) =>
+const getAllHand = (Model, sortValue) =>
   catchAsync(async (req, res) => {
+    const page = +req.query.page || 1;
+    const limit = 4;
+    const skip = (page - 1) * limit;
     const keyword = req.query.keyword
       ? {
           firstName: {
@@ -53,14 +56,19 @@ const getAllHand = (Model) =>
           },
         }
       : {};
-    const doc = await Model.find({ ...keyword });
+
+    const doc = await Model.find({ ...keyword })
+      .sort(sortValue)
+      .skip(skip)
+      .limit(limit);
+
+    const numModel = await Model.countDocuments();
+    if (req.query.page) {
+      if (skip >= numModel) throw new Error("This page does not exist");
+    }
 
     res.status(200).json({
-      status: "success",
-      resultes: doc.length,
-      data: {
-        data: doc,
-      },
+      data: { resultes: numModel, data: doc },
     });
   });
 

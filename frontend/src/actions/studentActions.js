@@ -10,29 +10,23 @@ import {
   STUDENT_FAIL,
 } from "../constants/studentConstants";
 
-export const getAllStudents = (keyword = "") => async (dispatch) => {
+export const getAllStudents = (keyword = "", page = "") => async (dispatch) => {
   try {
     dispatch({
       type: STUDENTS_REQUEST,
     });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
     const { data } = await axios.get(
-      `/api/students?keyword=${keyword}`,
-      config
+      `/api/students?keyword=${keyword}&&page=${page}`
     );
 
-    dispatch({ type: STUDENTS_SUCCESS, payload: data.data.data });
+    dispatch({ type: STUDENTS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
       type: STUDENTS_FAIL,
       payload:
-        error.response && error.response.statusText
-          ? error.response.statusText
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
           : error.message,
     });
   }
@@ -43,21 +37,16 @@ export const getStudent = (id) => async (dispatch) => {
     dispatch({
       type: STUDENT_REQUEST,
     });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
-    const { data } = await axios.get(`/api/students/${id}`, config);
+    const { data } = await axios.get(`/api/students/${id}`);
 
     dispatch({ type: STUDENT_SUCCESS, payload: data.data.data });
   } catch (error) {
     dispatch({
       type: STUDENT_FAIL,
       payload:
-        error.response && error.response.statusText
-          ? error.response.statusText
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
           : error.message,
     });
   }
@@ -67,24 +56,21 @@ export const createStudent = (
   firstName,
   lastName,
   dateBirth,
-  classes,
+  className,
   teachers
 ) => async (dispatch) => {
   try {
     dispatch({
       type: STUDENT_REQUEST,
     });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
-    const { data } = await axios.post(
-      `/api/students`,
-      { firstName, lastName, dateBirth, classes, teachers },
-      config
-    );
+    const { data } = await axios.post(`/api/students`, {
+      firstName,
+      lastName,
+      dateBirth,
+      className,
+      teachers,
+    });
 
     dispatch({ type: STUDENT_SUCCESS, payload: data.data.data });
     toast.success("saved");
@@ -92,8 +78,8 @@ export const createStudent = (
     dispatch({
       type: STUDENT_FAIL,
       payload:
-        error.response && error.response.statusText
-          ? error.response.statusText
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
           : error.message,
     });
     toast.error(error.message);
@@ -105,21 +91,16 @@ export const deleteStudent = (id) => async (dispatch) => {
     dispatch({
       type: STUDENT_REQUEST,
     });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
-    const { data } = await axios.delete(`/api/students/${id}`, config);
+    const { data } = await axios.delete(`/api/students/${id}`);
 
     dispatch({ type: STUDENT_SUCCESS, payload: data.data.data });
   } catch (error) {
     dispatch({
       type: STUDENT_FAIL,
       payload:
-        error.response && error.response.statusText
-          ? error.response.statusText
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
           : error.message,
     });
   }
