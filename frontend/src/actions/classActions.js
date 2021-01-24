@@ -101,3 +101,36 @@ export const deleteClass = (id) => async (dispatch) => {
     });
   }
 };
+
+export const updateClass = (
+  id,
+  className,
+  teachers,
+  students,
+  schoolYear
+) => async (dispatch) => {
+  try {
+    dispatch({
+      type: CLASS_REQUEST,
+    });
+
+    const { data } = await axios.patch(`/api/classes/${id}`, {
+      className,
+      teachers,
+      students,
+      schoolYear,
+    });
+
+    dispatch({ type: CLASS_SUCCESS, payload: data.data.data });
+    toast.success("saved");
+  } catch (error) {
+    dispatch({
+      type: CLASS_FAIL,
+      payload:
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
+          : error.message,
+    });
+    toast.error("ID NOT FOUND");
+  }
+};

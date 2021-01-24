@@ -10,11 +10,12 @@ import Loading from "../Loading";
 import Error from "../Error";
 import { getAllClasses } from "../../actions/classActions";
 
-const Class = () => {
+const Class = ({ location }) => {
   const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
   const [term, setTerm] = useState("");
+  const [btn, setBtn] = useState("add");
   let [count, setCount] = useState(1);
 
   const response = useSelector((state) => state.classes);
@@ -24,8 +25,9 @@ const Class = () => {
     dispatch(getAllClasses());
   }, [dispatch]);
 
-  const formHandler = () => {
+  const formHandler = (btn) => {
     setVisible(!visible);
+    setBtn(btn);
   };
 
   const searchTerm = (e) => {
@@ -54,12 +56,15 @@ const Class = () => {
   return (
     <>
       {visible ? (
-        <Form value="0" form={<FormCs />} />
+        <Form
+          value="0"
+          form={<FormCs disable={btn} count={() => setCount(1)} />}
+        />
       ) : (
         <Form value="full" form={<FormCs />} />
       )}
       <SearchBar
-        formHandler={formHandler}
+        formHandler={() => formHandler("add")}
         value={term}
         changeHandler={searchTerm}
         onSubmitSearch={onSubmitSearch}
@@ -67,11 +72,15 @@ const Class = () => {
       {loading ? (
         <Loading />
       ) : error ? (
-        <Error error={error} />
+        <Error error={error} loc={location} />
       ) : (
         <div className="lg:p-5 md:p-4 sm:p-3 p-2">
           <div className="scroll-table">
-            <Table classes={classes.data} />
+            <Table
+              classes={classes.data}
+              formHandler={() => formHandler("edite")}
+              count={() => setCount(1)}
+            />
           </div>
           <Navigation
             next={next}

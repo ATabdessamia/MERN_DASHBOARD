@@ -6,7 +6,7 @@ import ModalTch from "./ModalTch";
 import Modal from "../../Modal";
 import { deleteTeacher, getAllTeachers } from "../../actions/teacherActions";
 
-const Table = ({ teachers }) => {
+const Table = ({ teachers, formHandler, count }) => {
   const dispatch = useDispatch();
   const [hidden, setHidden] = useState(false);
   const [teachId, setTeachId] = useState("");
@@ -21,6 +21,7 @@ const Table = ({ teachers }) => {
     e.preventDefault();
     dispatch(deleteTeacher(id));
     dispatch(getAllTeachers());
+    count();
   };
 
   return (
@@ -57,7 +58,7 @@ const Table = ({ teachers }) => {
                     </button>
                   </td>
                   <td>
-                    <button className="edite-btn">
+                    <button className="edite-btn" onClick={formHandler}>
                       <Buttons d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </button>
                   </td>

@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
 
 import Buttons from "../Buttons";
 import Input from "../Input";
 import Select from "../Select";
 import Alert from "../Alert";
 import "react-datepicker/dist/react-datepicker.css";
-import { createTeacher, getAllTeachers } from "../../actions/teacherActions";
+import {
+  createTeacher,
+  getAllTeachers,
+  updateTeacher,
+} from "../../actions/teacherActions";
 
 const subjects = ["math", "biology", "geography", "history", "science"];
 const classes = [
@@ -19,25 +24,44 @@ const classes = [
   "grade 5",
 ];
 
-const FormTch = () => {
+const FormTch = ({ disable, count }) => {
   const dispatch = useDispatch();
 
   const [startDate, setStartDate] = useState(new Date());
   const [fName, setFname] = useState("");
   const [lName, setLname] = useState("");
+  const [id, setId] = useState("");
   const [cls, setCls] = useState([]);
   const [subj, setSubj] = useState([]);
+  const [btn, setBtn] = useState("create");
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTeacher(fName, lName, cls, subj, startDate));
+    if (fName === "" || lName === "" || cls === [] || subj === [])
+      toast.error("Please,Fill in the details below");
+
+    btn === "create"
+      ? dispatch(createTeacher(fName, lName, cls, subj, startDate))
+      : id !== "" &&
+        dispatch(updateTeacher(id, fName, lName, cls, subj, startDate));
+
     dispatch(getAllTeachers());
+    count();
   };
 
   return (
-    <form className="mt-5" onSubmit={onFormSubmit}>
+    <form onSubmit={onFormSubmit}>
       <Alert />
       <div className="p-5">
+        {disable === "edite" && (
+          <Input
+            id="id"
+            label="id"
+            placeholder="60096cef111d335f1ae70754"
+            onChange={(e) => setId(e.target.value)}
+            value={id}
+          />
+        )}
         <Input
           id="fName"
           label="first name"
@@ -88,10 +112,32 @@ const FormTch = () => {
           />
         </div>
       </div>
-      <div className="flex justify-end  p-5">
-        <button className="hidden-save" type="submit">
-          <Buttons d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-        </button>
+      <div className="flex justify-end md:flex-col p-5">
+        {disable === "add" ? (
+          <button
+            className="hidden-save"
+            type="submit"
+            onClick={() => setBtn("create")}
+          >
+            <Buttons
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+              className="w-6 h-6 mr-1"
+            />
+            create
+          </button>
+        ) : (
+          <button
+            className="hidden-save"
+            type="submit"
+            onClick={() => setBtn("update")}
+          >
+            <Buttons
+              d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+              className="w-6 h-6 mr-1"
+            />
+            update
+          </button>
+        )}
       </div>
     </form>
   );

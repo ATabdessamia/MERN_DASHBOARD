@@ -76,7 +76,7 @@
     @apply bg-indigo-800 px-5 py-1 text-purple-100 rounded focus:outline-none transform hover:scale-95 hover:bg-indigo-700;
   }
   .caption {
-    @apply bg-purple-100 py-4  border-b border-purple-900 text-xl font-black tracking-widest uppercase text-purple-900;
+    @apply bg-purple-100 py-4  border-b border-purple-900 text-xl font-black tracking-widest uppercase text-purple-900 font-mergim;
   }
   /*----table----*/
   .table {
@@ -113,11 +113,8 @@
   .hidden-select {
     @apply bg-purple-100 px-4  text-lg capitalize text-purple-900 py-1 rounded focus:outline-none ring ring-purple-100 ring-opacity-75;
   }
-  .hidden-cls {
-    @apply px-5 py-2 rounded focus:outline-none bg-red-300 mr-2 transform hover:scale-105 md:hidden hover:bg-red-200 text-purple-900;
-  }
   .hidden-save {
-    @apply px-5 py-2 rounded focus:outline-none bg-indigo-300  transform hover:scale-105 md:w-full flex justify-center hover:bg-indigo-200 text-purple-900;
+    @apply px-5 py-2 rounded focus:outline-none bg-indigo-400  transform hover:scale-105 md:w-full flex justify-center hover:bg-indigo-300 text-purple-900 font-black uppercase;
   }
   /*----modal----*/
   .modal {

@@ -102,3 +102,36 @@ export const deleteTeacher = (id) => async (dispatch) => {
     });
   }
 };
+
+export const updateTeacher = (
+  id,
+  firstName,
+  lastName,
+  classes,
+  Subjects,
+  year
+) => async (dispatch) => {
+  try {
+    dispatch({
+      type: TEACHER_REQUEST,
+    });
+
+    const { data } = await axios.patch(`/api/teachers/${id}`, {
+      firstName,
+      lastName,
+      teach: { classes, Subjects, year },
+    });
+
+    dispatch({ type: TEACHER_SUCCESS, payload: data.data.data });
+    toast.success("saved");
+  } catch (error) {
+    dispatch({
+      type: TEACHER_FAIL,
+      payload:
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
+          : error.message,
+    });
+    toast.error("ID NOT FOUND");
+  }
+};

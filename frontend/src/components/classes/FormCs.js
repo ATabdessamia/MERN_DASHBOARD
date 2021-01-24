@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
 
 import Buttons from "../Buttons";
 import Input from "../Input";
@@ -11,15 +12,21 @@ import Error from "../Error";
 import "react-datepicker/dist/react-datepicker.css";
 import { getAllTeachers } from "../../actions/teacherActions";
 import { getAllStudents } from "../../actions/studentActions";
-import { createClass, getAllClasses } from "../../actions/classActions";
+import {
+  createClass,
+  getAllClasses,
+  updateClass,
+} from "../../actions/classActions";
 
-const FormCs = () => {
+const FormCs = ({ disable, count }) => {
   const dispatch = useDispatch();
 
   const [startDate, setStartDate] = useState(new Date());
   const [cls, setCls] = useState("");
+  const [id, setId] = useState("");
   const [stud, setStud] = useState([]);
   const [profs, setProfs] = useState([]);
+  const [btn, setBtn] = useState("create");
 
   const response = useSelector((state) => state.teachers);
   const { loading, error, teachers } = response;
@@ -41,13 +48,29 @@ const FormCs = () => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    dispatch(createClass(cls, profs, stud, startDate));
+    if (cls === "" || profs === [] || stud === [])
+      toast.error("Please,Fill in the details below");
+
+    btn === "create"
+      ? dispatch(createClass(cls, profs, stud, startDate))
+      : id !== "" && dispatch(updateClass(id, cls, profs, stud, startDate));
+
     dispatch(getAllClasses());
+    count();
   };
   return (
-    <form className="mt-5" onSubmit={onFormSubmit}>
+    <form onSubmit={onFormSubmit}>
       <Alert />
       <div className="p-5">
+        {disable === "edite" && (
+          <Input
+            id="id"
+            label="id"
+            placeholder="60096cef111d335f1ae70754"
+            onChange={(e) => setId(e.target.value)}
+            value={id}
+          />
+        )}
         <Input
           id="cName"
           label="class name"
@@ -103,12 +126,31 @@ const FormCs = () => {
         </div>
       </div>
       <div className="flex justify-end p-5">
-        <button className="hidden-cls">
-          <Buttons d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-        </button>
-        <button className="hidden-save" type="submit">
-          <Buttons d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-        </button>
+        {disable === "add" ? (
+          <button
+            className="hidden-save"
+            type="submit"
+            onClick={() => setBtn("create")}
+          >
+            <Buttons
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+              className="w-6 h-6 mr-1"
+            />
+            create
+          </button>
+        ) : (
+          <button
+            className="hidden-save"
+            type="submit"
+            onClick={() => setBtn("update")}
+          >
+            <Buttons
+              d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+              className="w-6 h-6 mr-1"
+            />
+            update
+          </button>
+        )}
       </div>
     </form>
   );

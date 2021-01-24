@@ -4,13 +4,14 @@ import { useDispatch } from "react-redux";
 import Buttons from "../Buttons";
 import { deleteStudent, getAllStudents } from "../../actions/studentActions";
 
-const TableSt = ({ students }) => {
+const TableSt = ({ students, formHandler, count }) => {
   const dispatch = useDispatch();
 
   const onDeleteStudent = (e, id) => {
     e.preventDefault();
     dispatch(deleteStudent(id));
     dispatch(getAllStudents());
+    count();
   };
 
   return (
@@ -44,7 +45,7 @@ const TableSt = ({ students }) => {
                   </select>
                 </td>
                 <td>
-                  <button className="edite-btn">
+                  <button className="edite-btn" onClick={formHandler}>
                     <Buttons d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </button>
                 </td>

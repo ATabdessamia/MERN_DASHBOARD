@@ -57,7 +57,7 @@ export const createStudent = (
   lastName,
   dateBirth,
   className,
-  teachers
+  STUDENTs
 ) => async (dispatch) => {
   try {
     dispatch({
@@ -69,7 +69,7 @@ export const createStudent = (
       lastName,
       dateBirth,
       className,
-      teachers,
+      STUDENTs,
     });
 
     dispatch({ type: STUDENT_SUCCESS, payload: data.data.data });
@@ -82,7 +82,6 @@ export const createStudent = (
           ? error.response.data.data.message
           : error.message,
     });
-    toast.error(error.message);
   }
 };
 
@@ -103,5 +102,40 @@ export const deleteStudent = (id) => async (dispatch) => {
           ? error.response.data.data.message
           : error.message,
     });
+  }
+};
+
+export const updateStudent = (
+  id,
+  firstName,
+  lastName,
+  dateBirth,
+  className,
+  STUDENTs
+) => async (dispatch) => {
+  try {
+    dispatch({
+      type: STUDENT_REQUEST,
+    });
+
+    const { data } = await axios.patch(`/api/students/${id}`, {
+      firstName,
+      lastName,
+      dateBirth,
+      className,
+      STUDENTs,
+    });
+
+    dispatch({ type: STUDENT_SUCCESS, payload: data.data.data });
+    toast.success("saved");
+  } catch (error) {
+    dispatch({
+      type: STUDENT_FAIL,
+      payload:
+        error.response && error.response.data.data.message
+          ? error.response.data.data.message
+          : error.message,
+    });
+    toast.error("ID NOT FOUND");
   }
 };

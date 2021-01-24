@@ -6,7 +6,7 @@ import ModalCs from "./ModalCs";
 import Modal from "../../Modal";
 import { deleteClass, getAllClasses } from "../../actions/classActions";
 
-const TableCs = ({ classes }) => {
+const TableCs = ({ classes, formHandler, count }) => {
   const dispatch = useDispatch();
   const [hidden, setHidden] = useState(false);
   const [student, setStudent] = useState({});
@@ -23,6 +23,7 @@ const TableCs = ({ classes }) => {
     e.preventDefault();
     dispatch(deleteClass(id));
     dispatch(getAllClasses());
+    count();
   };
   return (
     <>
@@ -78,7 +79,7 @@ const TableCs = ({ classes }) => {
                     </button>
                   </td>
                   <td>
-                    <button className="edite-btn">
+                    <button className="edite-btn" onClick={formHandler}>
                       <Buttons d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </button>
                   </td>

@@ -10,11 +10,12 @@ import Loading from "../Loading.js";
 import Error from "../Error";
 import { getAllStudents } from "../../actions/studentActions";
 
-const Student = () => {
+const Student = ({ location }) => {
   const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
   const [term, setTerm] = useState("");
+  const [btn, setBtn] = useState("add");
   let [count, setCount] = useState(1);
 
   const response = useSelector((state) => state.students);
@@ -24,8 +25,9 @@ const Student = () => {
     dispatch(getAllStudents());
   }, [dispatch]);
 
-  const formHandler = () => {
+  const formHandler = (btn) => {
     setVisible(!visible);
+    setBtn(btn);
   };
 
   const searchTerm = (e) => {
@@ -56,12 +58,15 @@ const Student = () => {
   return (
     <>
       {visible ? (
-        <Form value="0" form={<FormSt />} />
+        <Form
+          value="0"
+          form={<FormSt disable={btn} count={() => setCount(1)} />}
+        />
       ) : (
         <Form value="full" form={<FormSt />} />
       )}
       <SearchBar
-        formHandler={formHandler}
+        formHandler={() => formHandler("add")}
         value={term}
         changeHandler={searchTerm}
         onSubmitSearch={onSubmitSearch}
@@ -69,12 +74,16 @@ const Student = () => {
       {loading ? (
         <Loading />
       ) : error ? (
-        <Error error={error} to="students" />
+        <Error error={error} to="students" loc={location} />
       ) : (
         <div className="lg:p-5 md:p-4 sm:p-3 p-2">
           <div className="scroll-table">
             {loading && <Loading />}
-            <Table students={students.data} />
+            <Table
+              students={students.data}
+              formHandler={() => formHandler("edite")}
+              count={() => setCount(1)}
+            />
           </div>
           <Navigation
             next={next}

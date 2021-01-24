@@ -15,7 +15,7 @@ const SearchBar = ({ formHandler, changeHandler, value, onSubmitSearch }) => {
           id="search"
           type="text"
           placeholder="Search..."
-          className="w-3/6 ml-5 p-2 rounded focus:outline-none ring ring-purple-700 ring-opacity-30"
+          className="w-3/6 ml-5 p-2 rounded focus:outline-none ring ring-purple-700 ring-opacity-30 font-black text-purple-900"
           autoComplete="off"
           value={value}
           onChange={changeHandler}

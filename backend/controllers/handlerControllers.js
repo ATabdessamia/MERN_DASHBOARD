@@ -9,7 +9,6 @@ const deleteHand = (Model) =>
     }
 
     res.status(204).json({
-      status: "success",
       data: null,
     });
   });
@@ -36,7 +35,6 @@ const createHand = (Model) =>
   catchAsync(async (req, res) => {
     const doc = await Model.create(req.body);
     res.status(201).json({
-      status: "success",
       data: {
         data: doc,
       },
@@ -81,7 +79,6 @@ const getHand = (Model) =>
     }
 
     res.status(200).json({
-      status: "success",
       data: {
         data: doc,
       },
