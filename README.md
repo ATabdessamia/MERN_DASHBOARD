@@ -1,4 +1,6 @@
 # MERN_DASHBOARD
+![GitHub Logo](/images/shot1-1.png)
+
 ## username:password
 admin:adminadmin
 
